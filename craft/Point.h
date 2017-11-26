@@ -1,5 +1,8 @@
 #pragma once
 
+/**
+* @brief 对结点点的封装，包括重载一些操作
+*/
 struct Point
 {
 	float x, y, z;

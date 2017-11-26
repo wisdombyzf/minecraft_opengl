@@ -1,10 +1,9 @@
 #pragma once
-
 #include "Param.h"
-
 #define BMP_Header_Length 54
 
-class Cube {
+class Cube 
+{
 public:
 	Cube(float, float, float, float, GLuint, GLuint, GLuint);
 
@@ -46,13 +45,15 @@ protected:
 };
 
 Cube::Cube(float x, float y, float z, float size, GLuint top, GLuint bot, GLuint side)
-	: _x(x), _y(y), _z(z), _size(size), _top(top), _bot(bot), _side(side) {
+	: _x(x), _y(y), _z(z), _size(size), _top(top), _bot(bot), _side(side)
+{
 }
 
-Cube::~Cube() {
+Cube::~Cube() 
+{
 }
 
-// 检查一个整数是否为2的整数次方，如果是，返回1，否则返回0
+/// 检查一个整数是否为2的整数次方，如果是，返回1，否则返回0
 int Cube::power_of_two(int n) {
 	if (n <= 0)
 		return 0;
@@ -60,7 +61,8 @@ int Cube::power_of_two(int n) {
 }
 
 //读取一个BMP文件作为纹理
-GLuint Cube::load_texture(const char *file_name) {
+GLuint Cube::load_texture(const char *file_name)
+{
 	GLint width, height, total_bytes;
 	GLubyte *pixels = 0;
 	GLuint last_texture_ID = 0, texture_ID = 0;
@@ -172,7 +174,8 @@ GLuint Cube::load_texture(const char *file_name) {
 	return texture_ID;
 }
 
-void Cube::createCube() {
+void Cube::createCube() 
+{
 	float x = _x;
 	float y = _y;
 	float z = _z;

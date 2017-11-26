@@ -1,11 +1,18 @@
 #pragma once
-
 #include "Point.h"
 #include "Param.h"
 
-class Man {
+/**
+* @brief 人物类
+* @TODO 以后是不是设置一个生物类的基类，然后主角，村民，苦力怕再去继承呢？？
+* 还有感觉类的封装性好像有问题
+*/
+class Man
+{
 public:
+	///基础大小
 	float basic_size = 1;
+	///速度
 	float speed = 0.5;
 	Point hair_scale, head_scale, thigh_scale, body_scale, arm_scale, eye_scale, mouth_scale;
 	Point head, hair, body, thighL, thighR, armL, armR, eyeL, eyeR, mouth;
@@ -21,31 +28,45 @@ public:
 
 
 public:
-	// 构造函数
-	Man() {
+	/// 构造函数
+	Man() 
+	{
 		reset();
 	}
 
-	// 重置人物大小
-	void resetSize(float new_basic) {
+	/**
+	* @brief 重置人物大小
+	*/
+	void resetSize(float new_basic) 
+	{
 		this->basic_size = new_basic;
 		reset();
 	}
 
-	// 是否正在走动
-	bool isMoving() {
+	/**
+	* @brief 是否正在走动
+	*/
+	bool is_moving() 
+	{
 		return move;
 	}
 
-	// 设置人物坐标
-	void setLocation(float x, float y, float z) {
+	/**
+	* @brief 设置人物坐标
+	*/
+	void setLocation(float x, float y, float z) 
+	{
 		this->x = x;
 		this->y = y;
 		this->z = z;
 	}
 
-	// 重绘人物
-	void reset() {
+
+	/**
+	* @brief 重设人物显示参数
+	*/
+	void reset()
+	{
 		// 比例控制
 		head_scale = Point(0.5, 0.5, 0.75, basic_size);
 		body_scale = Point(0.3, 1.25, 0.75, basic_size);
@@ -69,6 +90,6 @@ public:
 			basic_size);
 		mouth = Point(head_scale.x / 2, thigh_scale.y + body_scale.y + head_scale.y / 2 - 0.1, 0, basic_size);
 	}
-
+private:
 
 };

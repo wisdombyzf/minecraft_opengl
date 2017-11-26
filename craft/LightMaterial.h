@@ -73,8 +73,11 @@ clock_t lightSpeed = 1030;
 clock_t lastTime;
 clock_t nowTime;    //判断过了多少秒
 
-
-class LightMaterial {
+/**
+* @brief 光的设置类
+*/
+class LightMaterial 
+{
 public:
 	LightMaterial();
 
@@ -93,7 +96,8 @@ private:
 	GLfloat **material2;
 };
 
-LightMaterial::LightMaterial() {
+LightMaterial::LightMaterial() 
+{
 	material0 = new GLfloat *[5];
 	material0[0] = mat0_Ambient;
 	material0[1] = mat0_Diffuse;
@@ -124,20 +128,22 @@ LightMaterial::LightMaterial() {
 	material[2] = material2;
 };
 
-void LightMaterial::setBackGround() {
+void LightMaterial::setBackGround()
+{
 	GLfloat brightness = 0.5 * sin((2 * PI * (float)((int)light_Angle % 360) / 360.0) + PI) + 0.5;
 	//cout << brightness << endl;
 	glClearColor(brightness * 123 / 255.0, brightness * 184 / 255.0, brightness, 1.0f);
 }
 
-void LightMaterial::setLight() {
+void LightMaterial::setLight()
+{
 	//全局环境光
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gloabal_Ambient);
 
 	glPushMatrix();
 	glRotatef(light_Angle, 0.0f, 0.0f, 1.0f);    //旋转
 
-												 //0号光源设置(月亮）
+	//0号光源设置(月亮）
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_Ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_Diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_Specular);
@@ -169,7 +175,8 @@ void LightMaterial::setLight() {
 	glPopMatrix();
 
 	if (((int)light_Angle % 360 > 0 && (int)light_Angle % 360 < 180) ||
-		((int)light_Angle % 360 < -180 && (int)light_Angle % 360 > -360)) {
+		((int)light_Angle % 360 < -180 && (int)light_Angle % 360 > -360))
+	{
 		glEnable(GL_LIGHT0);
 		light0_Status = true;
 		glDisable(GL_LIGHT1);
@@ -184,7 +191,8 @@ void LightMaterial::setLight() {
 
 	//光源自动运行
 	nowTime = clock();
-	if (nowTime - lastTime > lightSpeed) {
+	if (nowTime - lastTime > lightSpeed) 
+	{
 		lastTime = nowTime;
 		light_Angle++;
 	}
@@ -194,7 +202,8 @@ void LightMaterial::setLight() {
 	//glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, light0_Quadratic);
 }
 
-void LightMaterial::setTorch(GLfloat x, GLfloat y, GLfloat z) {
+void LightMaterial::setTorch(GLfloat x, GLfloat y, GLfloat z)
+{
 	glLightfv(GL_LIGHT2, GL_AMBIENT, torch_Ambient);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, torch_Diffuse);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, torch_Specular);
@@ -216,7 +225,8 @@ void LightMaterial::setTorch(GLfloat x, GLfloat y, GLfloat z) {
 	glEnable(GL_LIGHT2);
 }
 
-void LightMaterial::setMaterial(int type) {
+void LightMaterial::setMaterial(int type) 
+{
 	if (type < 3) {
 		glMaterialfv(GL_FRONT, GL_AMBIENT, material[type][0]);
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, material[type][1]);

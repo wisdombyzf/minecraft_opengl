@@ -1,13 +1,14 @@
-﻿//
-//
-
-#pragma once
+﻿#pragma once
 
 #include"TexCube.h"
 #include<map>
 #include<string>
 
-class CubeManager {
+/**
+* @brief 方块管理类
+*/
+class CubeManager 
+{
 public:
 	void insertCube(const TexCube &texcube);
 
@@ -17,14 +18,23 @@ public:
 
 	void createAllCube();
 
+	/**
+	* @brief 构建沙漠神庙
+	*/
 	void buildPyramid(int x, int y, int z);
 
 	void buildannexBuilding(int x, int y, int z);
 
+	/**
+	* @brief 构建水池
+	*/
 	void buildPool(int x, int y, int z);
-
+	/**
+	* @brief 构建树木
+	*/
 	void buildTree(int x, int y, int z);
 
+	
 	void buildDiamondBuilding(int x, int y, int z);
 
 	bool isExist(string);
@@ -32,7 +42,8 @@ public:
 	map<string, TexCube> cubeMap;
 };
 
-void CubeManager::insertCube(const TexCube &texcube) {
+void CubeManager::insertCube(const TexCube &texcube) 
+{
 	int x, y, z;
 	x = texcube._x;
 	y = texcube._y;
@@ -53,8 +64,8 @@ bool CubeManager::isExist(string id) {
 	return cubeMap.find(id) != cubeMap.end();
 }
 
-// …≥ƒÆ…ÒµÓ
-void CubeManager::buildPyramid(int x, int y, int z) {
+void CubeManager::buildPyramid(int x, int y, int z) 
+{
 	for (int n = y; n <= 10; n++) {
 		for (int i = x + n; i < 2 * 10 - n; i++) {
 			for (int j = z + n; j < 2 * 10 - n; j++) {
@@ -109,8 +120,9 @@ void CubeManager::buildannexBuilding(int x, int y, int z) {
 	this->insertCube(TexCube(x + 3, y + 6, z, 1.0f, RedSand));
 }
 
-// ÀÆ≥ÿ
-void CubeManager::buildPool(int x, int y, int z) {
+
+void CubeManager::buildPool(int x, int y, int z) 
+{
 	int num_cube = 4;
 	for (int i = x + 1; i <= x + num_cube; i++) {
 		for (int j = z + 1; j <= z + num_cube; j++) {

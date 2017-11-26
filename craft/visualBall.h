@@ -6,7 +6,8 @@ float curPos[3], dx, dy, dz;
 
 // trackball
 // 在 mouseMotion() 中加入此函数
-void trackball_ptov(int x, int y, int width, int height, float v[3]) {
+void trackball_ptov(int x, int y, int width, int height, float v[3]) 
+{
 	float d, a;
 
 	v[0] = (2.0F * x - width) / width;
@@ -20,8 +21,10 @@ void trackball_ptov(int x, int y, int width, int height, float v[3]) {
 }
 
 // 在 mouseMotion() 中加入此函数，加在 trackball_ptov() 之后
-void trackMouse() {
-	if (trackingMouse) {
+void trackMouse() 
+{
+	if (trackingMouse) 
+	{
 		dx = curPos[0] - lastPos[0];
 		dy = curPos[1] - lastPos[1];
 		dz = curPos[2] - lastPos[2];
@@ -40,7 +43,8 @@ void trackMouse() {
 	}
 }
 
-void startMotion(int x, int y) {
+void startMotion(int x, int y) 
+{
 	trackingMouse = true;
 	redrawContinue = false;
 	startX = x;
@@ -51,7 +55,8 @@ void startMotion(int x, int y) {
 	trackballMove = true;
 }
 
-void stopMotion(int x, int y) {
+void stopMotion(int x, int y) 
+{
 	trackingMouse = false;
 	angle = 0.0F;
 	redrawContinue = false;

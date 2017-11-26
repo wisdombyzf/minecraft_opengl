@@ -1,11 +1,12 @@
+/**
+* @brief 参数定义头文件
+*/
 #pragma once
-
 #include <iostream>
 #include <cmath>
 #include<map>
 #include<vector>
 #include<string>
-//#include <windows.h>
 #include<gl\glut.h>
 #include "Point.h"
 #include "Crawler.h"
@@ -28,7 +29,7 @@ using namespace std;
 //相对坐标常量
 //const double INCREMENT = 0.05;
 
-// 世界参数
+/// 世界参数
 Point center = Point(0, 0, 0);
 Point lookAt = Point(5, 5, 5);
 Point cameraAt = Point(5, 5, 5);
@@ -52,19 +53,19 @@ float far_sight = 100;
 int scr_w;
 int scr_h;
 
-// 各种flag
+/// 各种flag
 bool trackingMouse = false;
 bool redrawContinue = false;
 bool trackballMove = false;
 
-// 视角转换变量
+/// 视角转换变量
 float angle = 0.0, axis[3], trans[3];
 float lastPos[3] = { 0.0F, 0.0F, 0.0F };
 float look_dy = 0;
 int curx, cury;
 int startX, startY;
 
-//飞机模型参数
+/// 飞机模型参数,测试用
 static int xRot = 0.;
 static int yRot = 0;
 static int zRot = 0;
@@ -74,6 +75,7 @@ static double fly_distance = 20;
 static float fly_speed = 0.15;
 bool flying = false;
 bool spining = false;
+///
 
 // 物体
 Man man;
@@ -118,8 +120,8 @@ GLfloat MatSpecular[] = { matSpecularR, matSpecularG, matSpecularB, 1.0f };
 GLfloat MatShininess;
 
 //窗口大小
-int WindowWidth = 600;
-int WindowHeight = 600;
+int WindowWidth = 1200;
+int WindowHeight = 800;
 
 //#include"Label.h"
 

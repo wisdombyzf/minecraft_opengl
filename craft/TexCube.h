@@ -21,7 +21,8 @@ enum CubeTex {
 	Sand
 };
 
-class TexCube : public Cube {
+class TexCube : public Cube 
+{
 public:
 	TexCube(float, float, float, float, CubeTex);
 
@@ -38,12 +39,14 @@ private:
 };
 
 TexCube::TexCube(float x, float y, float z, float size, CubeTex tex)
-	: Cube() {
+	: Cube() 
+{
 	_x = x;
 	_y = y;
 	_z = z;
 	_size = size;
-	switch (tex) {
+	switch (tex)
+	{
 	case Wood:
 		_top = Cube::texWood;
 		_bot = Cube::texWood;

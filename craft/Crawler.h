@@ -6,6 +6,9 @@
 #define PI 3.1415926535898
 using namespace std;
 
+/**
+* @brief ¿àÁ¦ÅÂÀà
+*/
 class Crawler
 {
 public:

@@ -1,5 +1,12 @@
+/**
+* @file main.c
+* @author zf
+* @date 2017/11/26
+* @detail 尝试利用opengl去复刻minecraft
+* @TODO 碰撞检测，地形生成，能加载minecraft的材质包，解决鼠标漂移问题，破坏方块，方块状态的记录，
+*/
 #define  _CRT_SECURE_NO_WARNINGS
-#include"Param.h"
+#include"Param.h"		//参数定义头文件
 #include "visualBall.h"
 #include "CubeManager.h"
 #include "LightMaterial.h"
@@ -8,16 +15,20 @@ CubeManager cube_mgr = CubeManager();
 LightMaterial lightMaterial;
 
 
-int changePos(float pos) {
-	if (pos < 0) {
+int changePos(float pos) 
+{
+	if (pos < 0) 
+	{
 		return pos - 0.5;
 	}
-	else {
+	else
+	{
 		return pos + 0.5;
 	}
 }
 
-void UnProject(float mouse_x, float mouse_y, int c) {
+void UnProject(float mouse_x, float mouse_y, int c) 
+{
 	int x = mouse_x;                /* 屏幕坐标 */
 	int y = mouse_y;
 	GLint viewport[4];
@@ -50,7 +61,9 @@ void UnProject(float mouse_x, float mouse_y, int c) {
 	}
 }
 
-// 小飞机
+/**
+* @brief 经典的飞机模型
+*/
 void plane() {
 	if (flying == true && spining == true) {
 		zRot = (zRot - 6) % 360;
@@ -166,21 +179,29 @@ void plane() {
 
 }
 
-void human() {
+/**
+* @人物运动相关函数
+*/
+void human()
+{
 	//跳跃函数
-	if (jumping == true && man.y < max_height && falling == false) {
+	if (jumping == true && man.y < max_height && falling == false)
+	{
 		man.y += jump_speed;
 		jump_speed -= 0.05;
-		if (jump_speed <= 0) {
+		if (jump_speed <= 0) 
+		{
 			falling = true;
 			jumping = false;
 			jump_speed = 0.3;
 		}
 	}
-	if (falling == true) {
+	if (falling == true) 
+	{
 		man.y -= fall_speed;
 		fall_speed += 0.05;
-		if (man.y - 0.05 <= ground_height) {
+		if (man.y - 0.05 <= ground_height) 
+		{
 			fall_speed = 0.3;
 			falling = false;
 		}
@@ -288,26 +309,38 @@ void human() {
 	glPopMatrix();
 }
 
-void setCrawler() {
-	for (auto &itr : crawler_arr) {
+/**
+* @brief 设置苦力怕
+*/
+void setCrawler() 
+{
+	for (auto &itr : crawler_arr)
+	{
 		itr.createCrawler();
 	}
 }
 
-void setTorch() {
-	for (auto itr : torch_arr) {
+/**
+* @brief 设置火把函数
+*/
+void setTorch()
+{
+	for (auto itr : torch_arr)
+	{
 		lightMaterial.setTorch(itr.x, itr.y, itr.z);
 	}
 }
 
-void floor() {
+void floor() 
+{
 	glColor3f(0.3f, 1.0f, 0.3f);
 	cube_mgr.createAllCube();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //display中视角切换设置
-void setting_view_person() {
+void setting_view_person() 
+{
 	if (view_person == FIRST_PERSON)
 	{
 		glMatrixMode(GL_MODELVIEW);
@@ -365,6 +398,9 @@ void setting_view_person() {
 	}
 }
 
+/**
+* @brief 显示函数
+*/
 void display() 
 {
 	lightMaterial.setBackGround();
@@ -392,61 +428,88 @@ void display()
 	setting_view_person();
 }
 
-void init() {
-	glShadeModel(GL_FLAT);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);        // Do not calculate inside of jet
-	glFrontFace(GL_CCW);        // Counter clock-wise polygons face out
-
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-	glEnable(GL_COLOR_MATERIAL);
+/**
+*	@brief opengl一些初始状态的设定
+*/
+void init() 
+{
+	///设置为非平滑着色
+	glShadeModel(GL_FLAT);	
+	///开启深度检测
+	glEnable(GL_DEPTH_TEST);	
+	///开启面剔除，取消对那些看不到的面的渲染
+	glEnable(GL_CULL_FACE); 
+	///设置逆时针的为正面
+	glFrontFace(GL_CCW);    
+	///开启颜色混合
+	glEnable(GL_BLEND);			
+	///设置以源颜色的alpha，目标颜色的所有进行混合
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);		
+	///开启光照，关闭则物体全是昏暗的
+	glEnable(GL_COLOR_MATERIAL);		
 }
 
-void refresh(int c) {
+/**
+* @brief 刷新
+*/
+void refresh(int c)
+{
 	//center.y = -(1 - sin(-left_thigh_angle / 180.0 * PI)) * basic_size * THIGH_SCALE_X + basic_size * FOOT_SCALE_Y / 2;
-	if (man.isMoving()) {
-		if (man.ltangle < -60) {
+	if (man.is_moving())
+	{
+		if (man.ltangle < -60)
+		{
 			left_forward = false;
 		}
-		else if (man.ltangle > 60) {
+		else if (man.ltangle > 60)
+		{
 			left_forward = true;
 		}
-		if (man.rtangle < -60) {
+		if (man.rtangle < -60) 
+		{
 			right_forward = false;
 		}
-		else if (man.rtangle > 60) {
+		else if (man.rtangle > 60) 
+		{
 			right_forward = true;
 		}
-		if (left_forward) {
+		if (left_forward)
+		{
 			man.ltangle--;
 			man.laangle++;
 		}
-		else {
+		else 
+		{
 			man.ltangle++;
 			man.laangle--;
 		}
-		if (right_forward) {
+		if (right_forward) 
+		{
 			man.rtangle--;
 			man.raangle++;
 		}
-		else {
+		else 
+		{
 			man.rtangle++;
 			man.raangle--;
 		}
 
 	}
-	else {
+	else
+	{
 		man.raangle = 0;
 		man.laangle = 0;
 		man.rtangle = 0;
 		man.ltangle = 0;
 	}
-	glutTimerFunc(DELAY, refresh, 0);
+	///每DELAY毫秒调用一下refresh，传入参数为0
+	glutTimerFunc(DELAY, refresh, 0);	
+	///标记当前窗口需要重绘
 	glutPostRedisplay();
 }
 
-void reshape(int w, int h) {
+void reshape(int w, int h)
+{
 	scr_w = w;
 	scr_h = h;
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -490,7 +553,8 @@ void mouseButton(int button, int state, int x, int y)
 		switch (state)
 		{
 		case GLUT_DOWN:
-			if (view_person == FIRST_PERSON) {
+			if (view_person == FIRST_PERSON) 
+			{
 				UnProject(x, y, GLUT_LEFT_BUTTON);
 			}
 			cameraAt.x /= VIEW_SCALE;
@@ -504,10 +568,13 @@ void mouseButton(int button, int state, int x, int y)
 
 		}
 	}
-	else if (button == GLUT_RIGHT_BUTTON) {
+	else if (button == GLUT_RIGHT_BUTTON) 
+	{
 		// 视角收缩
-		if (state == GLUT_DOWN) {
-			if (view_person == FIRST_PERSON) {
+		if (state == GLUT_DOWN)
+		{
+			if (view_person == FIRST_PERSON) 
+			{
 				UnProject(x, y, GLUT_RIGHT_BUTTON);
 			}
 			cameraAt.x *= VIEW_SCALE;
@@ -520,7 +587,8 @@ void mouseButton(int button, int state, int x, int y)
 }
 
 // 鼠标移动回调函数
-void mouseMotion(int x, int y) {
+void mouseMotion(int x, int y) 
+{
 
 	trackball_ptov(x, y, scr_w, scr_h, curPos);
 	trackMouse();
@@ -528,14 +596,17 @@ void mouseMotion(int x, int y) {
 }
 
 // 空闲回调函数
-void idle() {
+void idle() 
+{
 	// 如果鼠标发生移动，则后面自动转动
 	if (redrawContinue) glutPostRedisplay();
 }
 
 // 键盘输入
-void control(unsigned char key, int x, int y) {
-	switch (key) {
+void control(unsigned char key, int x, int y) 
+{
+	switch (key) 
+	{
 	case 32:
 		jumping = true;
 		break;
@@ -561,19 +632,23 @@ void control(unsigned char key, int x, int y) {
 		break;
 	case 'h':
 		reset_god = false;
-		if (view_person >= 3) {
+		if (view_person >= 3) 
+		{
 			view_person = 0;
 		}
-		else {
+		else 
+		{
 			view_person++;
 		}
 		break;
 	case 'r':
-		if (view_person != 3) {
+		if (view_person != 3) 
+		{
 			last_view = view_person;
 			view_person = 3;
 		}
-		else {
+		else 
+		{
 			view_person = last_view;
 		}
 		break;
@@ -598,8 +673,10 @@ void control(unsigned char key, int x, int y) {
 }
 
 // 按键松开
-void controlup(unsigned char key, int x, int y) {
-	switch (key) {
+void controlup(unsigned char key, int x, int y) 
+{
+	switch (key) 
+	{
 	case 'w':
 		man.move = false;
 		break;
@@ -615,36 +692,44 @@ void controlup(unsigned char key, int x, int y) {
 	}
 }
 
-// 方块初始化
-void initCube() {
-	//启用2D纹理和材质初始化
-	glEnable(GL_TEXTURE_2D);
-	// 在这里做一些初始化
-	glEnable(GL_DEPTH_TEST);
-	glTexParameterf(GL_NEAREST, GL_TEXTURE_WRAP_S, GL_REPEAT);
+/**
+* @brief 方块(地图)初始化，加载纹理贴图
+*/
+void initCube()
+{
+	///启用2D纹理和材质初始化
+	glEnable(GL_TEXTURE_2D); 
+	///开启深度检测
+	glEnable(GL_DEPTH_TEST);	
+	///纹理参数设置，设置GL_NEAREST速度较快，设置GL_REPEAT使纹理重复
+	glTexParameterf(GL_NEAREST, GL_TEXTURE_WRAP_S, GL_REPEAT); 
 	refresh(0);
 
 	Cube::initCubeTexture();
 
-	int num_cube = 25;
+	int num_cube = 30;
 
-	for (int i = num_cube; i >= (-num_cube); i--) {
-		for (int j = num_cube; j >= (-num_cube); j--) {
+	for (int i = num_cube; i >= (-num_cube); i--)
+	{
+		for (int j = num_cube; j >= (-num_cube); j--) 
+		{
 			cube_mgr.insertCube(TexCube(i, 0, j, 1.0f, Soil));
 		}
 	}
 	//////////////////////地面//////////////////////////
-
+	
 	cube_mgr.insertCube(TexCube(0, 1, 0, 1.0f, Table));
 
 	cube_mgr.buildPool(8, 1, -10);
-	cube_mgr.buildPyramid(1, 1, 1);
+	cube_mgr.buildPyramid(10, 10, 10);
 	cube_mgr.buildDiamondBuilding(-8, 1, 1);
-	for (int i = 1; i <= 6; i++) {
+	//种树----
+	for (int i = 1; i <= 6; i++) 
+	{
 		cube_mgr.buildTree(-1, 1, -4 * i);
 		cube_mgr.buildTree(19, 1, -4 * i);
 	}
-
+	
 }
 
 // 播放音乐
@@ -667,6 +752,9 @@ void music() {
 	//    }
 }
 
+/**
+* @brief 初始化除方块外的其他物体
+*/
 void initOther()
 {
 	for (int i = 0; i < 10; i++)
@@ -676,49 +764,76 @@ void initOther()
 
 }
 
+/**
+* @brief 设定人物的初始位置（出生点^_^）
+* @return hhhhhhhhhh
+*/
 void setPosition() {
 
-	man.x = 8;
+	man.x = 0;	
 	man.y = 1;
-	man.z = -10;
+	man.z = 0;
 
 	x_air = 8.0f;
 	y_air = 8.0f;
 	z_air = -10.0f;
 }
-
-int main(int argc, char *argv[]) {
+/**
+* @brief main函数
+* @param argc:参数数量  *argv[]参数数组
+* @return 呵呵呵呵呵呵
+*/
+int main(int argc, char *argv[]) 
+{
+	//start 初始窗口设置
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	GLint WindowWidth = 600;
-	GLint WindowHeight = 600;
 	glutInitWindowSize(WindowWidth, WindowHeight);
-
 	GLint screenWidth = glutGet(GLUT_SCREEN_WIDTH);
 	GLint screenHeight = glutGet(GLUT_SCREEN_HEIGHT);
 	glutInitWindowPosition((screenWidth - WindowWidth) / 2, (screenHeight - WindowHeight) / 2);
 	glutCreateWindow("我的世界");
-	init();
+	//end
 
+	int length=256;
+	int ****a = new int***[length];
+	for (size_t num_chunk = 0; num_chunk < 50; num_chunk++)
+	{
+		a[num_chunk] = new int**[16];
+		for (size_t i = 0; i < 16; i++)
+		{
+			a[num_chunk][i] = new int*[16];
+			for (size_t j = 0; j < 16; j++)
+			{
+				a[num_chunk][i][j] = new int[256];
+			}
+		}
+	}
+	
+
+	init();
 	lastTime = clock();    //启动时首次设定当前时间
 	setPosition();
-
-	//    music();
-	glutDisplayFunc(display);
-
 	//ShowCursor(false);
 	initCube();
 	initOther();
 
+	glutDisplayFunc(display);
+	///窗口大小改变时不改变游戏物体比例
 	glutReshapeFunc(reshape);
+	///当鼠标移动时，并有没鼠标键按下时的回调函数
 	glutPassiveMotionFunc(passiveMotion);
+	///鼠标点击的回调函数
 	glutMouseFunc(mouseButton);
-
-
+	///当鼠标移动时，鼠标键按下时的回调函数
 	glutMotionFunc(mouseMotion);
+	///键盘按键弹起时的回调函数
 	glutKeyboardUpFunc(controlup);
+	///键盘回调函数
 	glutKeyboardFunc(control);
+
 	glutMainLoop();
+
 	return 0;
 }
 

@@ -45,6 +45,9 @@
     <ClInclude Include="visualBall.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mian.cpp">
