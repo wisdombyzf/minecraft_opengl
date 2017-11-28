@@ -7,13 +7,17 @@
 */
 #define  _CRT_SECURE_NO_WARNINGS
 #include"Param.h"		//参数定义头文件
+#include"Crawler.h"
 #include "visualBall.h"
 #include "CubeManager.h"
 #include "LightMaterial.h"
+#include"Man.h"
 
 CubeManager cube_mgr = CubeManager();
 LightMaterial lightMaterial;
-
+vector<Crawler> crawler_arr;
+// 人物
+Man man;
 
 int changePos(float pos) 
 {
@@ -65,10 +69,12 @@ void UnProject(float mouse_x, float mouse_y, int c)
 * @brief 经典的飞机模型
 */
 void plane() {
-	if (flying == true && spining == true) {
+	if (flying == true && spining == true) 
+	{
 		zRot = (zRot - 6) % 360;
 		z_air += fly_speed;
-		if (z_air > fly_distance) {
+		if (z_air > fly_distance) 
+		{
 			flying = false;
 			spining = false;
 		}
@@ -812,7 +818,7 @@ int main(int argc, char *argv[])
 	
 
 	init();
-	lastTime = clock();    //启动时首次设定当前时间
+	//lastTime = clock();    //启动时首次设定当前时间
 	setPosition();
 	//ShowCursor(false);
 	initCube();

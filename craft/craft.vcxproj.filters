@@ -13,21 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\cube">
+      <UniqueIdentifier>{19edba14-7fd1-4cae-ab9f-c17b68adc1c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\light">
+      <UniqueIdentifier>{3f5e9a09-8404-40da-b792-525fbe07ccab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\bio">
+      <UniqueIdentifier>{603d9c41-73aa-43cd-ab3d-91a8f4b4022e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cube.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Crawler.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CubeManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Label.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="LightMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Man.h">
@@ -45,12 +45,42 @@
     <ClInclude Include="visualBall.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LightMaterial.h">
+      <Filter>头文件\light</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>头文件\cube</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeManager.h">
+      <Filter>头文件\cube</Filter>
+    </ClInclude>
     <ClInclude Include="Chunk.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mian.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LightMaterial.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="visualBall.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Crawler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TexCube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

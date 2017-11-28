@@ -9,11 +9,7 @@
 #include<string>
 #include<gl\glut.h>
 #include "Point.h"
-#include "Crawler.h"
-#include "Man.h"
-#include "Cube.h"
-//#include "Digitalv.h"
-#include "TexCube.h"
+//#include "TexCube.h"
 
 
 using namespace std;
@@ -54,16 +50,15 @@ int scr_w;
 int scr_h;
 
 /// 各种flag
-bool trackingMouse = false;
-bool redrawContinue = false;
-bool trackballMove = false;
-
-/// 视角转换变量
-float angle = 0.0, axis[3], trans[3];
-float lastPos[3] = { 0.0F, 0.0F, 0.0F };
-float look_dy = 0;
-int curx, cury;
-int startX, startY;
+extern bool trackingMouse;
+extern bool redrawContinue;
+extern bool trackballMove;
+extern int scr_w;
+extern int scr_h;
+extern float curPos[3], dx, dy, dz;
+extern float look_dy;
+extern int curx, cury;
+extern float angle, axis[3], trans[3];
 
 /// 飞机模型参数,测试用
 static int xRot = 0.;
@@ -77,9 +72,8 @@ bool flying = false;
 bool spining = false;
 ///
 
-// 物体
-Man man;
-vector<Crawler> crawler_arr;
+
+
 vector<Point> torch_arr;
 
 // 跳跃参数
