@@ -1,10 +1,11 @@
 #pragma once
 #include "Point.h"
+#include "coll_dete.h"
 
+#define PI 3.1415926535898
 /**
 * @brief 人物类
 * @TODO 以后是不是设置一个生物类的基类，然后主角，村民，苦力怕再去继承呢？？
-* 还有感觉类的封装性好像有问题
 */
 class Man
 {
@@ -28,11 +29,14 @@ public:
 
 public:
 	/// 构造函数
-	Man() 
-	{
-		reset();
-	}
-
+	Man();
+	/**
+	* @brief 人物向前移动
+	* @return 若不可移动则，返回false
+	*/
+	bool forward();
+	
+	
 	/**
 	* @brief 重置人物大小
 	*/

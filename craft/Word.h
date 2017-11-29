@@ -2,6 +2,7 @@
 #include"Point.h"
 #include"Chunk.h"
 
+
 /**
 * @brief 世界类，用以储存多个chunk构成的地图
 */
@@ -32,10 +33,25 @@ public:
 	*/
 	int get_block(int x,int y,int z);
 
+	/**
+	* @param a:世界坐标系下的某一点  new_block:新方块的代码
+	* @brief 修改世界坐标系下某一点的方块代码
+	* @return 修改成功返回true
+	*/
+	bool set_block(Point a, size_t new_block);
+	/**
+	* @param x,y,z:世界坐标系下的某一点的x,y,z坐标  new_block:新方块的代码
+	* @brief 修改世界坐标系下某一点的方块代码
+	* @return 修改成功返回对true
+	*/
+	bool set_block(int x, int y, int z, size_t new_block);
+
 
 	~Word();
 
 private:
-
+	//暂定世界大小为word_max*word_max大小的矩形
+	const size_t word_max = 6;
+	std::vector<std::vector<Chunk>> word_data;
 
 };

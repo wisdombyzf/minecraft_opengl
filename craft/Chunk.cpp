@@ -36,17 +36,24 @@ void Chunk::print_test()
 
 bool Chunk::creat_chunk(CubeManager &cube_mgr)
 {
-	;
 	for (size_t i = 0; i < chunk_x; i++)
 	{
 		for (size_t j = 0; j < chunk_y; j++)
 		{
 			for (size_t k = 0; k < chunk_z; k++)
 			{
-				if (j<10)
+				if (j<1)
 				{
 					chunk_data[i][j][k] = 1;
 					cube_mgr.insertCube(TexCube(i,j, k,1.0f,Soil));
+				}
+				else
+				{
+					if ((i==4&&j<6)|| (k == 4 && j<6))
+					{
+						chunk_data[i][j][k] = 1;
+						cube_mgr.insertCube(TexCube(i, j, k, 1.0f, Soil));
+					}
 				}
 			}
 		}
@@ -67,9 +74,9 @@ bool Chunk::set_data(size_t x, size_t y, size_t z, size_t new_block)
 	}
 }
 
-int Chunk::get_data(size_t x, size_t y, size_t z)
+int Chunk::get_data(size_t x, size_t y, size_t z) const
 {
-	if (x>chunk_x || y>chunk_y || z>chunk_z)
+	if (x>=chunk_x || y>=chunk_y || z>=chunk_z)
 	{
 		return -1;
 	}

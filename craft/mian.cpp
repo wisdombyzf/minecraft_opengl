@@ -3,7 +3,7 @@
 * @author zf
 * @date 2017/11/26
 * @detail 尝试利用opengl去复刻minecraft
-* @TODO 碰撞检测，地形生成，能加载minecraft的材质包，解决鼠标漂移问题，破坏方块，方块状态的记录，
+* @TODO 地形生成，能加载minecraft的材质包，解决鼠标漂移问题，破坏方块，方块状态的记录
 */
 #define  _CRT_SECURE_NO_WARNINGS
 #include<vector>
@@ -15,6 +15,7 @@
 #include "LightMaterial.h"
 #include"Man.h"
 #include"Chunk.h"
+#include"coll_dete.h"
 
 using namespace std;
 ////参数
@@ -24,6 +25,9 @@ using namespace std;
 #define VIEW_SCALE 2
 #define PI 3.1415926535898
 #define MAX_CHAR 128
+
+
+Chunk chunk_test;
 
 
 //相对坐标常量
@@ -718,6 +722,11 @@ void idle()
 // 键盘输入
 void control(unsigned char key, int x, int y) 
 {
+	Collision check;
+	cout << "X:" << man.x << "  z:" << man.z << endl;
+	float x_temp;
+	float z_temp;
+	float y_temp;
 	switch (key) 
 	{
 	case 'p':
@@ -727,25 +736,70 @@ void control(unsigned char key, int x, int y)
 		jumping = true;
 		break;
 	case 'a':
-		man.move = true;
-		man.x -= man.speed * sin(man.vangle / 180 * PI);
-		man.z -= man.speed * cos(man.vangle / 180 * PI);
+	{
+		x_temp = man.x - man.speed * sin(man.vangle / 180 * PI);
+		z_temp = man.z - man.speed * cos(man.vangle / 180 * PI);
+		y_temp = man.y;
+		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
+			y_temp + 2, z_temp - 1, chunk_test))
+		{
+			man.move = true;
+			man.x = x_temp;
+			man.z = z_temp;
+		}
+
+	}
 		break;
 	case 'd':
-		man.move = true;
-		man.x += man.speed * sin(man.vangle / 180 * PI);
-		man.z += man.speed * cos(man.vangle / 180 * PI);
+		 x_temp = man.x + man.speed * sin(man.vangle / 180 * PI);
+		 z_temp = man.z + man.speed * cos(man.vangle / 180 * PI);
+		 y_temp = man.y;
+		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
+			y_temp + 2, z_temp - 1, chunk_test))
+		{
+			man.move = true;
+			man.x = x_temp;
+			man.z = z_temp;
+		}
+		else
+		{
+			cout << "无法通行" << endl;
+		}
 		break;
 	case 'w':
-		man.move = true;
-		man.x += man.speed * cos(man.vangle / 180 * PI);
-		man.z -= man.speed * sin(man.vangle / 180 * PI);
+		x_temp = man.x + man.speed * cos(man.vangle / 180 * PI);
+		z_temp = man.z - man.speed * sin(man.vangle / 180 * PI);
+		y_temp = man.y;
+		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
+			y_temp + 2, z_temp - 1, chunk_test))
+		{
+			man.move = true;
+			man.x = x_temp;
+			man.z = z_temp;
+		}
+		else
+		{
+			cout << "无法通行" << endl;
+		}
 		break;
 	case 's':
-		man.move = true;
-		man.x -= man.speed * cos(man.vangle / 180 * PI);
-		man.z += man.speed * sin(man.vangle / 180 * PI);
+		x_temp = man.x - man.speed * cos(man.vangle / 180 * PI);
+		z_temp = man.z + man.speed * sin(man.vangle / 180 * PI);
+		y_temp = man.y;
+		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
+			y_temp + 2, z_temp - 1, chunk_test))
+		{
+			man.move = true;
+			man.x = x_temp;
+			man.z = z_temp;
+		}
+		else
+		{
+			cout << "无法通行" << endl;
+		}
 		break;
+
+		
 	case 'h':
 		reset_god = false;
 		if (view_person >= 3) 
@@ -823,8 +877,9 @@ void initCube()
 
 	Cube::initCubeTexture();
 
-	Chunk chunk_test;
+
 	chunk_test.creat_chunk(cube_mgr);
+	//chunk_test.print_test();
 
 	/*
 	int num_cube = 30;
@@ -839,16 +894,17 @@ void initCube()
 	*/
 	//////////////////////地面//////////////////////////
 	
+
 	cube_mgr.insertCube(TexCube(0, 1, 0, 1.0f, Table));
 
-	cube_mgr.buildPool(8, 1, -10);
-	cube_mgr.buildPyramid(10, 10, 10);
-	cube_mgr.buildDiamondBuilding(-8, 1, 1);
+	cube_mgr.buildPool(8, 1, 10);
+	cube_mgr.buildPyramid(30, 1, 10);
+	cube_mgr.buildDiamondBuilding(8, 1, 1);
 	//种树----
 	for (int i = 1; i <= 6; i++) 
 	{
-		cube_mgr.buildTree(-1, 1, -4 * i);
-		cube_mgr.buildTree(19, 1, -4 * i);
+		cube_mgr.buildTree(1, 1, 4 * i);
+		cube_mgr.buildTree(19, 1, 4 * i);
 	}
 	//cube_mgr.createAllCube();
 }
@@ -892,9 +948,9 @@ void initOther()
 void setPosition()
 {
 
-	man.x = 0;	
-	man.y = 0;
-	man.z = 0;
+	man.x = 6;	
+	man.y = 1;
+	man.z = 6;
 
 	x_air = 8.0f;
 	y_air = 8.0f;
@@ -917,23 +973,7 @@ int main(int argc, char *argv[])
 	GLint screenHeight = glutGet(GLUT_SCREEN_HEIGHT);
 	glutInitWindowPosition((screenWidth - WindowWidth) / 2, (screenHeight - WindowHeight) / 2);
 	glutCreateWindow("我的世界");
-	//end
-
-	int length=256;
-	int ****a = new int***[length];
-	for (size_t num_chunk = 0; num_chunk < 50; num_chunk++)
-	{
-		a[num_chunk] = new int**[16];
-		for (size_t i = 0; i < 16; i++)
-		{
-			a[num_chunk][i] = new int*[16];
-			for (size_t j = 0; j < 16; j++)
-			{
-				a[num_chunk][i][j] = new int[256];
-			}
-		}
-	}
-	
+	//end	
 
 	init();
 	//lastTime = clock();    //启动时首次设定当前时间
@@ -958,6 +998,7 @@ int main(int argc, char *argv[])
 
 	glutMainLoop();
 
+	system("pause");
 	return 0;
 }
 

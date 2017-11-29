@@ -59,7 +59,6 @@ void CubeManager::buildPyramid(int x, int y, int z)
 	this->buildannexBuilding(x + 14, y, z);
 }
 
-// …≥ƒÆ…ÒµÓ∏Ω Ù–°¬•
 void CubeManager::buildannexBuilding(int x, int y, int z) {
 	for (int k = y; k < y + 9; k++) {
 		for (int i = x; i < x + 5; i++) {
@@ -89,7 +88,6 @@ void CubeManager::buildannexBuilding(int x, int y, int z) {
 	this->insertCube(TexCube(x + 3, y + 6, z, 1.0f, RedSand));
 }
 
-
 void CubeManager::buildPool(int x, int y, int z)
 {
 	int num_cube = 4;
@@ -109,7 +107,6 @@ void CubeManager::buildPool(int x, int y, int z)
 	}
 }
 
-// ¥Û ˜
 void CubeManager::buildTree(int x, int y, int z) {
 	for (int i = y; i <= y + 5; i++) {
 		this->insertCube(TexCube(x, i, z, 1.0f, Tree));
@@ -123,7 +120,6 @@ void CubeManager::buildTree(int x, int y, int z) {
 	}
 }
 
-// ◊Í Ø–°¬•
 void CubeManager::buildDiamondBuilding(int x, int y, int z) {
 	for (int k = y; k < y + 9; k++) {
 		for (int i = x; i < x + 5; i++) {
