@@ -6,18 +6,126 @@
 * @TODO 碰撞检测，地形生成，能加载minecraft的材质包，解决鼠标漂移问题，破坏方块，方块状态的记录，
 */
 #define  _CRT_SECURE_NO_WARNINGS
-#include"Param.h"		//参数定义头文件
+#include<vector>
+#include<map>
+#include<string>
 #include"Crawler.h"
 #include "visualBall.h"
 #include "CubeManager.h"
 #include "LightMaterial.h"
 #include"Man.h"
+#include"Chunk.h"
 
+using namespace std;
+////参数
+#define DELAY 12
+#define NUM_OF_LINE 32
+#define BLOCK_SIZE 1
+#define VIEW_SCALE 2
+#define PI 3.1415926535898
+#define MAX_CHAR 128
+
+
+//相对坐标常量
+//const double INCREMENT = 0.05;
+
+/// 世界参数
+Point center = Point(0, 0, 0);
+Point lookAt = Point(5, 5, 5);
+Point cameraAt = Point(5, 5, 5);
+Point godAt = Point(8, 11, -18);
+
+float last_mm_x = 0;
+float last_mm_y = 0;
+
+bool reset_god = false;
+int view_person = 0;  // 0 上帝视角，1 第一人称，2 第三人称, 虚拟球
+int last_view = 0;
+enum {
+	GOD, FIRST_PERSON, THIRD_PERSON, BALL
+};
+enum {
+	HEAD, HAIR, BODY, THIGH_L, THIGH_R, ARM_L, ARMR, EYE_L, EYE_R, MOUTH
+};
+
+float near_sight = 0.1f;
+float far_sight = 100;
+int scr_w;
+int scr_h;
+
+/// 各种flag
+extern bool trackingMouse;
+extern bool redrawContinue;
+extern bool trackballMove;
+extern int scr_w;
+extern int scr_h;
+extern float curPos[3], dx, dy, dz;
+extern float look_dy;
+extern int curx, cury;
+extern float angle, axis[3], trans[3];
+
+/// 飞机模型参数,测试用
+static int xRot = 0.;
+static int yRot = 0;
+static int zRot = 0;
+static double x_air, y_air, z_air;
+static double fly_distance = 20;
+
+static float fly_speed = 0.15;
+bool flying = false;
+bool spining = false;
+///
+
+
+
+vector<Point> torch_arr;
+
+// 跳跃参数
+bool jumping = false;
+bool falling = false;
+float jump_speed = 0.3;
+float fall_speed = 0.3;
+static float max_height = 3.0;
+static float ground_height = 1.00;
+
+
+//相对坐标参数
+bool left_forward = true;
+bool right_forward = false;
+bool look_from_left = true;
+
+
+//光源太阳
+GLfloat s_angle = 0.0f;
+GLfloat LightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f };        //光源位置
+
+GLfloat ambient = 0.2f;
+GLfloat LightAmbient[] = { ambient, ambient, ambient, 1.0f };        //环境光
+GLfloat diffuse = 0.2f;
+GLfloat LightDiffuse[] = { diffuse, 0, 0, 1.0f };        //漫反射
+GLfloat specular = 0.2f;
+GLfloat LightSpecular[] = { specular, 0.6f, 0.6f, 1.0f };    //镜面反射
+
+															 //材料参数
+GLfloat matEmissionR, matEmissionG, matEmissionB;
+GLfloat MatEmission[] = { matEmissionR, matEmissionG, matEmissionB, 1.0f };
+GLfloat matAmbientR, matAmbientG, matAmbientB;
+GLfloat MatAmbient[] = { matAmbientR, matAmbientG, matAmbientB, 1.0f };
+GLfloat matDiffuseR, matDiffuseG, matDiffuseB;
+GLfloat MatDiffuse[] = { matDiffuseR, matDiffuseG, matDiffuseB, 1.0f };
+GLfloat matSpecularR, matSpecularG, matSpecularB;
+GLfloat MatSpecular[] = { matSpecularR, matSpecularG, matSpecularB, 1.0f };
+GLfloat MatShininess;
+//窗口大小
+int WindowWidth = 1200;
+int WindowHeight = 800;
 CubeManager cube_mgr = CubeManager();
 LightMaterial lightMaterial;
 vector<Crawler> crawler_arr;
 // 人物
 Man man;
+////////
+
 
 int changePos(float pos) 
 {
@@ -339,7 +447,7 @@ void setTorch()
 
 void floor() 
 {
-	glColor3f(0.3f, 1.0f, 0.3f);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	cube_mgr.createAllCube();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -415,7 +523,6 @@ void display()
 	glEnable(GL_BLEND);
 	lightMaterial.setLight();
 
-
 	glDisable(GL_BLEND);
 	lightMaterial.setMaterial(2);
 	floor();
@@ -435,7 +542,7 @@ void display()
 }
 
 /**
-*	@brief opengl一些初始状态的设定
+* @brief opengl一些初始状态的设定
 */
 void init() 
 {
@@ -613,6 +720,9 @@ void control(unsigned char key, int x, int y)
 {
 	switch (key) 
 	{
+	case 'p':
+		cout << man.vangle << endl;
+		break;
 	case 32:
 		jumping = true;
 		break;
@@ -713,6 +823,10 @@ void initCube()
 
 	Cube::initCubeTexture();
 
+	Chunk chunk_test;
+	chunk_test.creat_chunk(cube_mgr);
+
+	/*
 	int num_cube = 30;
 
 	for (int i = num_cube; i >= (-num_cube); i--)
@@ -722,6 +836,7 @@ void initCube()
 			cube_mgr.insertCube(TexCube(i, 0, j, 1.0f, Soil));
 		}
 	}
+	*/
 	//////////////////////地面//////////////////////////
 	
 	cube_mgr.insertCube(TexCube(0, 1, 0, 1.0f, Table));
@@ -735,7 +850,7 @@ void initCube()
 		cube_mgr.buildTree(-1, 1, -4 * i);
 		cube_mgr.buildTree(19, 1, -4 * i);
 	}
-	
+	//cube_mgr.createAllCube();
 }
 
 // 播放音乐
@@ -774,16 +889,19 @@ void initOther()
 * @brief 设定人物的初始位置（出生点^_^）
 * @return hhhhhhhhhh
 */
-void setPosition() {
+void setPosition()
+{
 
 	man.x = 0;	
-	man.y = 1;
+	man.y = 0;
 	man.z = 0;
 
 	x_air = 8.0f;
 	y_air = 8.0f;
 	z_air = -10.0f;
 }
+
+
 /**
 * @brief main函数
 * @param argc:参数数量  *argv[]参数数组

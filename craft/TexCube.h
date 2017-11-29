@@ -22,7 +22,10 @@ enum CubeTex {
 class TexCube : public Cube 
 {
 public:
-	TexCube(float, float, float, float, CubeTex);
+	/**
+	* @brief todo
+	*/
+	TexCube(float x, float y, float z, float size, CubeTex tex);
 	TexCube() {};
 	void createCube();
 	~TexCube();

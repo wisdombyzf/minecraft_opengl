@@ -14,10 +14,19 @@ void CubeManager::insertCube(const TexCube &texcube)
 
 void CubeManager::createAllCube()
 {
+
 	for (auto it : cubeMap)
 	{
 		it.second.createCube();
 	}
+	/*
+	//该代码相当于：该好好看书的
+	for (auto it = std::begin(cubeMap); it != std::end(cubeMap); it++)
+	{
+		it.second.createCube();
+	}
+	*/
+
 }
 
 bool CubeManager::isExist(string id) {

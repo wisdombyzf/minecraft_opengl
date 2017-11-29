@@ -1,7 +1,5 @@
 #pragma once
 
-#include"Param.h"
-
 GLuint base;
 
 GLvoid BuildFont(GLvoid)                                        // Build Our Font Display List

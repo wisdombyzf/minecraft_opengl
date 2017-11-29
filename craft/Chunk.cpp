@@ -1,6 +1,6 @@
 #include "Chunk.h"
 #pragma once
-//#include"CubeManager.h"
+
 
 Chunk::Chunk()
 {
@@ -11,7 +11,6 @@ Chunk::Chunk()
 		chunk_data[i].resize(chunk_y);
 		for (size_t j = 0; j < chunk_y; j++)
 		{
-
 			chunk_data[i][j].resize(chunk_z);
 		}
 	}
@@ -21,7 +20,7 @@ Chunk::~Chunk()
 {
 }
 
-bool Chunk::creat_chunk()
+void Chunk::print_test()
 {
 	for (size_t i = 0; i < chunk_x; i++)
 	{
@@ -29,9 +28,25 @@ bool Chunk::creat_chunk()
 		{
 			for (size_t k = 0; k < chunk_z; k++)
 			{
-				if (k<60)
+				std::cout << chunk_data[i][j][k];
+			}
+		}
+	}
+}
+
+bool Chunk::creat_chunk(CubeManager &cube_mgr)
+{
+	;
+	for (size_t i = 0; i < chunk_x; i++)
+	{
+		for (size_t j = 0; j < chunk_y; j++)
+		{
+			for (size_t k = 0; k < chunk_z; k++)
+			{
+				if (j<10)
 				{
-					//cube_mgr.insertCube(TexCube(i, 0, j, 1.0f, Soil));
+					chunk_data[i][j][k] = 1;
+					cube_mgr.insertCube(TexCube(i,j, k,1.0f,Soil));
 				}
 			}
 		}

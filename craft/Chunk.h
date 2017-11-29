@@ -1,7 +1,8 @@
 #pragma once
-
 #include<iostream>
 #include<vector>
+#include"CubeManager.h"
+
 /**
 * @file Chunk.h
 * @author zf
@@ -20,23 +21,12 @@ class Chunk
 public:
 	Chunk();
 	~Chunk();
-	void print_test()
-	{
-		for (size_t i = 0; i < chunk_x; i++)
-		{
-			for (size_t j = 0; j < chunk_y; j++)
-			{
-				for (size_t k = 0; k < chunk_z; k++)
-				{
-					std::cout << chunk_data[i][j][k];
-				}
-			}
-		}
-	}
+	void print_test();
+
 	/**
 	* @brief 构建一个区块
 	*/
-	bool creat_chunk();
+	bool creat_chunk(CubeManager &cube_mgr);
 
 
 	/**
@@ -55,10 +45,10 @@ public:
 private:
 	///一个chunk的长
 	const size_t chunk_x = 16;
-	///一个chunk的宽
-	const size_t chunk_y = 16;
 	///一个chunk的高
-	const size_t chunk_z = 256;
+	const size_t chunk_y = 256;
+	///一个chunk的深(按屏幕坐标系)
+	const size_t chunk_z = 16;
 	///数据储存数组
 	vector<vector<vector<size_t>>> chunk_data;
 

@@ -22,24 +22,30 @@
     <Filter Include="头文件\bio">
       <UniqueIdentifier>{603d9c41-73aa-43cd-ab3d-91a8f4b4022e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\cube">
+      <UniqueIdentifier>{e94541e3-e5d9-47f3-8497-1b18da56ab20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\bio">
+      <UniqueIdentifier>{97997035-2e51-42ac-9a92-a985da32e49d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\light">
+      <UniqueIdentifier>{dfde558f-040a-4531-8913-b28fec4d3271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\physics">
+      <UniqueIdentifier>{4f64ed4f-f669-4de5-92a9-1a87dfa5fd1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\physics">
+      <UniqueIdentifier>{5f5290e3-ffca-4c70-b6b6-d5662fd7b28c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\map">
+      <UniqueIdentifier>{8aba5b2f-eecb-492f-b33f-f2e1ff061344}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crawler.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Man.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Param.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Point.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TexCube.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="visualBall.h">
@@ -54,33 +60,54 @@
     <ClInclude Include="CubeManager.h">
       <Filter>头文件\cube</Filter>
     </ClInclude>
+    <ClInclude Include="TexCube.h">
+      <Filter>头文件\cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Crawler.h">
+      <Filter>头文件\bio</Filter>
+    </ClInclude>
+    <ClInclude Include="Man.h">
+      <Filter>头文件\bio</Filter>
+    </ClInclude>
+    <ClInclude Include="coll_dete.h">
+      <Filter>头文件\physics</Filter>
+    </ClInclude>
     <ClInclude Include="Chunk.h">
-      <Filter>头文件</Filter>
+      <Filter>头文件\map</Filter>
+    </ClInclude>
+    <ClInclude Include="Word.h">
+      <Filter>头文件\map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mian.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="LightMaterial.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="visualBall.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Crawler.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TexCube.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Chunk.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Crawler.cpp">
+      <Filter>源文件\bio</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>源文件\cube</Filter>
+    </ClCompile>
     <ClCompile Include="CubeManager.cpp">
+      <Filter>源文件\cube</Filter>
+    </ClCompile>
+    <ClCompile Include="LightMaterial.cpp">
+      <Filter>源文件\light</Filter>
+    </ClCompile>
+    <ClCompile Include="TexCube.cpp">
+      <Filter>源文件\cube</Filter>
+    </ClCompile>
+    <ClCompile Include="coll_dete.cpp">
+      <Filter>源文件\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Word.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

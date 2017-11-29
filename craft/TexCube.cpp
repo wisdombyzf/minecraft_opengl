@@ -1,5 +1,6 @@
 #include"TexCube.h"
 
+
 TexCube::TexCube(float x, float y, float z, float size, CubeTex tex)
 	: Cube()
 {
