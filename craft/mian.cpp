@@ -45,6 +45,7 @@ float last_mm_y = 0;
 bool reset_god = false;
 int view_person = 0;  // 0 上帝视角，1 第一人称，2 第三人称, 虚拟球
 int last_view = 0;
+
 enum {
 	GOD, FIRST_PERSON, THIRD_PERSON, BALL
 };
@@ -84,13 +85,7 @@ bool spining = false;
 
 vector<Point> torch_arr;
 
-// 跳跃参数
-bool jumping = false;
-bool falling = false;
-float jump_speed = 0.3;
-float fall_speed = 0.3;
-static float max_height = 3.0;
-static float ground_height = 1.00;
+
 
 
 //相对坐标参数
@@ -180,7 +175,8 @@ void UnProject(float mouse_x, float mouse_y, int c)
 /**
 * @brief 经典的飞机模型
 */
-void plane() {
+void plane() 
+{
 	if (flying == true && spining == true) 
 	{
 		zRot = (zRot - 6) % 360;
@@ -298,136 +294,6 @@ void plane() {
 }
 
 /**
-* @人物运动相关函数
-*/
-void human()
-{
-	//跳跃函数
-	if (jumping == true && man.y < max_height && falling == false)
-	{
-		man.y += jump_speed;
-		jump_speed -= 0.05;
-		if (jump_speed <= 0) 
-		{
-			falling = true;
-			jumping = false;
-			jump_speed = 0.3;
-		}
-	}
-	if (falling == true) 
-	{
-		man.y -= fall_speed;
-		fall_speed += 0.05;
-		if (man.y - 0.05 <= ground_height) 
-		{
-			fall_speed = 0.3;
-			falling = false;
-		}
-	}
-
-
-	// 人
-	glPushMatrix();
-	glTranslatef(man.x, man.y, man.z);
-	glRotatef(man.vangle, 0, 1, 0);
-
-	////////////////////////////Hair//////////////////////////
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glPushMatrix();
-	glTranslatef(man.hair.x, man.hair.y, man.hair.z);
-	glScalef(man.hair_scale.x, man.hair_scale.y, man.hair_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	///////////////////////////Head////////////////////////////
-	// head
-	glColor3f(139.0 / 255, 115.0 / 255, 85.0 / 255);
-	glPushMatrix();
-	glTranslatef(man.head.x, man.head.y, man.head.z);
-	glScalef(man.head_scale.x, man.head_scale.y, man.head_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	// left eye
-	glColor3f(0.9f, 0.9f, 0.9f);
-	glPushMatrix();
-	glTranslatef(man.eyeL.x, man.eyeL.y, man.eyeL.z);
-	glScalef(man.eye_scale.x, man.eye_scale.y, man.eye_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	// right eye
-	glColor3f(0.9f, 0.9f, 0.9f);
-	glPushMatrix();
-	glTranslatef(man.eyeR.x, man.eyeR.y, man.eyeR.z);
-	glScalef(man.eye_scale.x, man.eye_scale.y, man.eye_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	// mouth
-	glColor3f(1, 1, 1);
-	glPushMatrix();
-	glTranslatef(man.mouth.x, man.mouth.y, man.mouth.z);
-	glScalef(man.mouth_scale.x, man.mouth_scale.y, man.mouth_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-
-	///////////////////////////Body////////////////////////////
-	glColor3f(0.0f, 206.0 / 255, 209.0 / 255);
-	glPushMatrix();
-	glTranslatef(man.body.x, man.body.y, man.body.z);
-	glScalef(man.body_scale.x, man.body_scale.y, man.body_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	/////////////////////////Leg/////////////////////////
-	//Left leg
-	glColor3f(67.0 / 255, 110.0 / 255, 238.0 / 255);
-	glPushMatrix();
-	glTranslatef(man.thighL.x, 2 * man.thighL.y, man.thighL.z);
-	glRotatef(man.ltangle, 0, 0, 1);
-	glTranslatef(0, -man.thighR.y, 0);
-	glScalef(man.thigh_scale.x, man.thigh_scale.y, man.thigh_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	//Right leg
-	glColor3f(67.0 / 255, 110.0 / 255, 238.0 / 255);
-	glPushMatrix();
-	glTranslatef(man.thighR.x, 2 * man.thighR.y, man.thighR.z);
-	glRotatef(man.rtangle, 0, 0, 1);
-	glTranslatef(0, -man.thighR.y, 0);
-	glScalef(man.thigh_scale.x, man.thigh_scale.y, man.thigh_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	///////////////////////Arm////////////////////////
-
-	//Left Arm
-	glColor3f(139.0 / 255, 115.0 / 255, 85.0 / 255);
-	glPushMatrix();
-	glTranslatef(man.armL.x, man.arm_scale.y / 2 + man.armL.y, man.armL.z);
-	glRotatef(man.laangle, 0, 0, 1);
-	glTranslatef(0, -man.arm_scale.y / 2, 0);
-	glScalef(man.arm_scale.x, man.arm_scale.y, man.arm_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	//Right Arm
-	glColor3f(139.0 / 255, 115.0 / 255, 85.0 / 255);
-	glPushMatrix();
-	glTranslatef(man.armR.x, man.arm_scale.y / 2 + man.armR.y, man.armR.z);
-	glRotatef(man.raangle, 0, 0, 1);
-	glTranslatef(0, -man.arm_scale.y / 2, 0);
-	glScalef(man.arm_scale.x, man.arm_scale.y, man.arm_scale.z);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	glPopMatrix();
-}
-
-/**
 * @brief 设置苦力怕
 */
 void setCrawler() 
@@ -531,7 +397,7 @@ void display()
 	lightMaterial.setMaterial(2);
 	floor();
 	lightMaterial.setMaterial(0);
-	human();
+	man.refresh();
 	lightMaterial.setMaterial(2);
 	plane();
 	lightMaterial.setMaterial(1);
@@ -571,7 +437,6 @@ void init()
 */
 void refresh(int c)
 {
-	//center.y = -(1 - sin(-left_thigh_angle / 180.0 * PI)) * basic_size * THIGH_SCALE_X + basic_size * FOOT_SCALE_Y / 2;
 	if (man.is_moving())
 	{
 		if (man.ltangle < -60)
@@ -610,7 +475,6 @@ void refresh(int c)
 			man.rtangle++;
 			man.raangle--;
 		}
-
 	}
 	else
 	{
@@ -637,7 +501,7 @@ void reshape(int w, int h)
 	glLoadIdentity();
 }
 
-// 鼠标空闲回调函数
+// 鼠标空闲回调函数.......
 void passiveMotion(int x, int y)
 {
 	float r = 0.06;
@@ -733,73 +597,20 @@ void control(unsigned char key, int x, int y)
 		cout << man.vangle << endl;
 		break;
 	case 32:
-		jumping = true;
+		man.jump();
 		break;
 	case 'a':
-	{
-		x_temp = man.x - man.speed * sin(man.vangle / 180 * PI);
-		z_temp = man.z - man.speed * cos(man.vangle / 180 * PI);
-		y_temp = man.y;
-		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
-			y_temp + 2, z_temp - 1, chunk_test))
-		{
-			man.move = true;
-			man.x = x_temp;
-			man.z = z_temp;
-		}
-
-	}
+		man.left(chunk_test);
 		break;
 	case 'd':
-		 x_temp = man.x + man.speed * sin(man.vangle / 180 * PI);
-		 z_temp = man.z + man.speed * cos(man.vangle / 180 * PI);
-		 y_temp = man.y;
-		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
-			y_temp + 2, z_temp - 1, chunk_test))
-		{
-			man.move = true;
-			man.x = x_temp;
-			man.z = z_temp;
-		}
-		else
-		{
-			cout << "无法通行" << endl;
-		}
+		man.right(chunk_test);
 		break;
 	case 'w':
-		x_temp = man.x + man.speed * cos(man.vangle / 180 * PI);
-		z_temp = man.z - man.speed * sin(man.vangle / 180 * PI);
-		y_temp = man.y;
-		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
-			y_temp + 2, z_temp - 1, chunk_test))
-		{
-			man.move = true;
-			man.x = x_temp;
-			man.z = z_temp;
-		}
-		else
-		{
-			cout << "无法通行" << endl;
-		}
+		man.forward(chunk_test);
 		break;
 	case 's':
-		x_temp = man.x - man.speed * cos(man.vangle / 180 * PI);
-		z_temp = man.z + man.speed * sin(man.vangle / 180 * PI);
-		y_temp = man.y;
-		if (!check.is_collision(x_temp, y_temp, z_temp, x_temp - 1,
-			y_temp + 2, z_temp - 1, chunk_test))
-		{
-			man.move = true;
-			man.x = x_temp;
-			man.z = z_temp;
-		}
-		else
-		{
-			cout << "无法通行" << endl;
-		}
+		man.back(chunk_test);
 		break;
-
-		
 	case 'h':
 		reset_god = false;
 		if (view_person >= 3) 
@@ -873,11 +684,7 @@ void initCube()
 	glEnable(GL_DEPTH_TEST);	
 	///纹理参数设置，设置GL_NEAREST速度较快，设置GL_REPEAT使纹理重复
 	glTexParameterf(GL_NEAREST, GL_TEXTURE_WRAP_S, GL_REPEAT); 
-	refresh(0);
-
 	Cube::initCubeTexture();
-
-
 	chunk_test.creat_chunk(cube_mgr);
 	//chunk_test.print_test();
 
@@ -893,10 +700,7 @@ void initCube()
 	}
 	*/
 	//////////////////////地面//////////////////////////
-	
-
 	cube_mgr.insertCube(TexCube(0, 1, 0, 1.0f, Table));
-
 	cube_mgr.buildPool(8, 1, 10);
 	cube_mgr.buildPyramid(30, 1, 10);
 	cube_mgr.buildDiamondBuilding(8, 1, 1);
@@ -906,7 +710,6 @@ void initCube()
 		cube_mgr.buildTree(1, 1, 4 * i);
 		cube_mgr.buildTree(19, 1, 4 * i);
 	}
-	//cube_mgr.createAllCube();
 }
 
 // 播放音乐
@@ -934,6 +737,7 @@ void music() {
 */
 void initOther()
 {
+	refresh(0);
 	for (int i = 0; i < 10; i++)
 	{
 		crawler_arr.push_back(Crawler(8, 1, -10 - i));
@@ -981,7 +785,6 @@ int main(int argc, char *argv[])
 	//ShowCursor(false);
 	initCube();
 	initOther();
-
 	glutDisplayFunc(display);
 	///窗口大小改变时不改变游戏物体比例
 	glutReshapeFunc(reshape);

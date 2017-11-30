@@ -78,6 +78,9 @@
     <ClInclude Include="Word.h">
       <Filter>头文件\map</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mian.cpp">
