@@ -10,78 +10,31 @@
 #include<map>
 #include<string>
 #include"Crawler.h"
-#include "visualBall.h"
+//#include "visualBall.h"
 #include "CubeManager.h"
 #include "LightMaterial.h"
 #include"Man.h"
 #include"Chunk.h"
 #include"coll_dete.h"
+#include"Camera.h"
 
 using namespace std;
 ////参数
 #define DELAY 12
 #define NUM_OF_LINE 32
 #define BLOCK_SIZE 1
-#define VIEW_SCALE 2
 #define PI 3.1415926535898
 #define MAX_CHAR 128
 
 
 Chunk chunk_test;
-
-
-//相对坐标常量
-//const double INCREMENT = 0.05;
-
-/// 世界参数
-Point center = Point(0, 0, 0);
-Point lookAt = Point(5, 5, 5);
-Point cameraAt = Point(5, 5, 5);
-Point godAt = Point(8, 11, -18);
-
-float last_mm_x = 0;
-float last_mm_y = 0;
-
-bool reset_god = false;
-int view_person = 0;  // 0 上帝视角，1 第一人称，2 第三人称, 虚拟球
-int last_view = 0;
-
-enum {
-	GOD, FIRST_PERSON, THIRD_PERSON, BALL
-};
-enum {
-	HEAD, HAIR, BODY, THIGH_L, THIGH_R, ARM_L, ARMR, EYE_L, EYE_R, MOUTH
-};
-
+Camera camera;
+///
 float near_sight = 0.1f;
 float far_sight = 100;
 int scr_w;
 int scr_h;
-
-/// 各种flag
-extern bool trackingMouse;
-extern bool redrawContinue;
-extern bool trackballMove;
-extern int scr_w;
-extern int scr_h;
-extern float curPos[3], dx, dy, dz;
-extern float look_dy;
-extern int curx, cury;
-extern float angle, axis[3], trans[3];
-
-/// 飞机模型参数,测试用
-static int xRot = 0.;
-static int yRot = 0;
-static int zRot = 0;
-static double x_air, y_air, z_air;
-static double fly_distance = 20;
-
-static float fly_speed = 0.15;
-bool flying = false;
-bool spining = false;
-///
-
-
+extern float curPos[3];
 
 vector<Point> torch_arr;
 
@@ -126,173 +79,6 @@ Man man;
 ////////
 
 
-int changePos(float pos) 
-{
-	if (pos < 0) 
-	{
-		return pos - 0.5;
-	}
-	else
-	{
-		return pos + 0.5;
-	}
-}
-
-void UnProject(float mouse_x, float mouse_y, int c) 
-{
-	int x = mouse_x;                /* 屏幕坐标 */
-	int y = mouse_y;
-	GLint viewport[4];
-	GLdouble mvmatrix[16], projmatrix[16];
-	GLfloat winx, winy, winz;
-	GLdouble posx, posy, posz;
-
-	glPushMatrix();
-
-	//glScalef(0.1, 0.1, 0.1);
-	glGetIntegerv(GL_VIEWPORT, viewport);            /* 获取三个矩阵 */
-	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
-	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
-
-	glPopMatrix();
-
-	winx = x;
-	winy = scr_h - y;
-
-	glReadPixels((int)winx, (int)winy, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winz);            /* 获取深度 */
-	gluUnProject(winx, winy, winz, mvmatrix, projmatrix, viewport, &posx, &posy, &posz);    /* 获取三维坐标 */
-	int xx = changePos(posx);
-	int yy = changePos(posy);
-	int zz = changePos(posz);
-	if (c == GLUT_LEFT_BUTTON) {
-		cube_mgr.insertCube(TexCube(xx, yy, zz, 1.0f, Tnt));
-	}
-	else {
-		torch_arr.push_back(Point(xx, yy, zz));
-	}
-}
-
-/**
-* @brief 经典的飞机模型
-*/
-void plane() 
-{
-	if (flying == true && spining == true) 
-	{
-		zRot = (zRot - 6) % 360;
-		z_air += fly_speed;
-		if (z_air > fly_distance) 
-		{
-			flying = false;
-			spining = false;
-		}
-	}
-
-	glPushMatrix();
-
-	glTranslatef(x_air, y_air, z_air);
-	glRotatef(xRot, 1.0f, 0.0f, 0.0f);  // 绕X轴旋转
-	glRotatef(yRot, 0.0f, 1.0f, 0.0f);  // 绕Y轴旋转
-	glRotatef(zRot, 0.0f, 0.0f, 1.0f);  // 绕Z轴旋转
-
-										// 飞机
-	glBegin(GL_TRIANGLES);
-	// 机头
-	glColor3f(0.79f, 0.08f, 0.14f);  // 深红
-	glVertex3f(-15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, 60.0f / 100);
-
-	glColor3f(0.97f, 0.29f, 0.30f);  // 粉红
-	glVertex3f(-15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, 60.0f / 100);
-	glVertex3f(0.0f / 100, 15.0f / 100, 30.0f / 100);
-
-	glColor3f(1.0f, 0.51f, 0.0f);  // 橘黄
-	glVertex3f(0.0f / 100, 0.0f / 100, 60.0f / 100);
-	glVertex3f(15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 15.0f / 100, 30.0f / 100);
-
-	// 机身
-	glColor3f(1.0f, 1.0f, 0.0f);  // 明黄
-	glVertex3f(-15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 15.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-
-	glColor3f(1.0f, 1.0f, 0.0f);  // 明黄
-	glVertex3f(0.0f / 100, 15.0f / 100, 30.0f / 100);
-	glVertex3f(15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-
-	glColor3f(0.73f, 0.0f, 0.57f);  // 紫色
-	glVertex3f(15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(-15.0f / 100, 0.0f / 100, 30.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-
-	// 机尾巴
-	glColor3f(0.79f, 0.08f, 0.14f);  // 深红
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 15.0f / 100, -70.0f / 100);
-
-	glColor3f(0.97f, 0.29f, 0.30f);  // 粉红
-	glVertex3f(-15.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -70.0f / 100);
-
-	glColor3f(1.0f, 0.51f, 0.0f);  // 橘黄
-	glVertex3f(15.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-
-	// 由于背面被消除，背面再画一次
-	glColor3f(0.73f / 100, 0.0f / 100, 0.57f);  // 紫色
-	glVertex3f(0.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-	glVertex3f(0.0f / 100, 15.0f / 100, -70.0f / 100);
-
-
-	glColor3f(1.0f, 1.0f, 0.0f);  // 明黄
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-	glVertex3f(-15.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -70.0f / 100);
-
-	glColor3f(1.0f, 1.0f, 0.0f);  // 明黄
-	glVertex3f(0.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(15.0f / 100, 0.0f / 100, -70.0f / 100);
-	glVertex3f(0.0f / 100, 0.0f / 100, -53.0f / 100);
-
-	// 机翼下侧面
-	glColor3ub(158, 196, 246 / 100);  // 紫蓝
-	glVertex3f(0.0f / 100, 2.0f / 100, 27.0f / 100);
-	glVertex3f(-60.0f / 100, 2.0f / 100, -8.0f / 100);
-	glVertex3f(60.0f / 100, 2.0f / 100, -8.0f / 100);
-
-	// 左翼
-	glColor3f(0.2f, 0.08f, 0.69f);  // 深蓝
-	glVertex3f(60.0f / 100, 2.0f / 100, -8.0f / 100);
-	glVertex3f(0.0f / 100, 7.0f / 100, -8.0f / 100);
-	glVertex3f(0.0f / 100, 2.0f / 100, 27.0f / 100);
-
-	// 右翼
-	glColor3f(0.2f, 0.08f, 0.69f);  // 深蓝
-	glVertex3f(0.0f / 100, 2.0f / 100, 27.0f / 100);
-	glVertex3f(0.0f / 100, 7.0f / 100, -8.0f / 100);
-	glVertex3f(-60.0f / 100, 2.0f / 100, -8.0f / 100);
-
-	// 机翼后侧面
-	glColor3ub(192, 192, 192);
-	glVertex3f(60.0f / 100, 2.0f / 100, -8.0f / 100);
-	glVertex3f(-60.0f / 100, 2.0f / 100, -8.0f / 100);
-	glVertex3f(0.0f / 100, 7.0f / 100, -8.0f / 100);
-
-	glEnd();
-
-
-	glPopMatrix();
-
-}
-
 /**
 * @brief 设置苦力怕
 */
@@ -322,65 +108,7 @@ void floor()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-//display中视角切换设置
-void setting_view_person() 
-{
-	if (view_person == FIRST_PERSON)
-	{
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		cameraAt.x = man.x + 1.3 * cos(man.vangle / 180.0 * PI);
-		cameraAt.y = man.y + man.head.y;
-		cameraAt.z = man.z - 1.3 * sin(man.vangle / 180.0 * PI);
 
-		lookAt.x = man.x + 5 * cos(man.vangle / 180.0 * PI);
-		lookAt.y = man.y + man.hair.y - look_dy;
-		lookAt.z = man.z - 5 * sin(man.vangle / 180.0 * PI);
-		gluLookAt(cameraAt.x, cameraAt.y, cameraAt.z,
-			lookAt.x, lookAt.y, lookAt.z,
-			0.0f, 1.0f, 0.0f);
-	}
-	else if (view_person == GOD) 
-	{
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		if (!reset_god)
-		{
-			cameraAt = godAt;
-			lookAt.x = 10;
-			lookAt.y = 0;
-			lookAt.z = 0;
-			reset_god = true;
-		}
-
-		gluLookAt(cameraAt.x, cameraAt.y, cameraAt.z,
-			lookAt.x, lookAt.y, lookAt.z,
-			0.0f, 1.0f, 0.0f);
-	}
-	else if (view_person == THIRD_PERSON) 
-	{
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		cameraAt.x = man.x - 10 * cos(man.vangle / 180.0 * PI);
-		cameraAt.y = man.head.y + 10;
-		cameraAt.z = man.z + 10 * sin(man.vangle / 180.0 * PI);
-
-		lookAt.x = man.x;
-		lookAt.y = man.hair.y;
-		lookAt.z = man.z;
-
-		gluLookAt(cameraAt.x, cameraAt.y, cameraAt.z,
-			lookAt.x, lookAt.y, lookAt.z,
-			0.0f, 1.0f, 0.0f);
-	}
-	else if (view_person == BALL)
-	{
-		if (trackballMove) 
-		{
-			glRotatef(angle, axis[0], axis[1], axis[2]);
-		}
-	}
-}
 
 /**
 * @brief 显示函数
@@ -398,8 +126,6 @@ void display()
 	floor();
 	lightMaterial.setMaterial(0);
 	man.refresh();
-	lightMaterial.setMaterial(2);
-	plane();
 	lightMaterial.setMaterial(1);
 	setCrawler();
 	setTorch();
@@ -407,8 +133,7 @@ void display()
 	//glRasterPos2f(0.0f, 0.0f);
 	//drawString("Hello, World!");
 	glutSwapBuffers();
-
-	setting_view_person();
+	camera.setting_view_person(man);
 }
 
 /**
@@ -434,6 +159,7 @@ void init()
 
 /**
 * @brief 刷新
+* @TODO   待解决
 */
 void refresh(int c)
 {
@@ -504,65 +230,14 @@ void reshape(int w, int h)
 // 鼠标空闲回调函数.......
 void passiveMotion(int x, int y)
 {
-	float r = 0.06;
-	man.vangle -= 0.1 * (x - last_mm_x);
-
-	if (x < r * scr_w && last_mm_x > x)
-	{
-		x = (1 - r) * scr_w;
-		//        SetCursorPos(x, y);
-	}
-	else if (x > (1 - r) * scr_w && last_mm_x < x) 
-	{
-		x = r * scr_w;
-		//        SetCursorPos(x, y);
-	}
-	if (view_person == FIRST_PERSON)
-	{
-		look_dy += 0.01 * (y - last_mm_y);
-	}
-	last_mm_x = x;
-	last_mm_y = y;
+	camera.unname(x, y, scr_w, man);
 }
+
 
 // 鼠标点击函数
 void mouseButton(int button, int state, int x, int y) 
 {
-
-	if (button == GLUT_LEFT_BUTTON)
-	{
-		switch (state)
-		{
-		case GLUT_DOWN:
-			if (view_person == FIRST_PERSON) 
-			{
-				UnProject(x, y, GLUT_LEFT_BUTTON);
-			}
-			cameraAt.x /= VIEW_SCALE;
-			cameraAt.y /= VIEW_SCALE;
-			cameraAt.z /= VIEW_SCALE;
-			startMotion(x, y);
-			break;
-		case GLUT_UP:
-			stopMotion(x, y);
-			break;
-
-		}
-	}
-	else if (button == GLUT_RIGHT_BUTTON) 
-	{
-		// 视角收缩
-		if (state == GLUT_DOWN)
-		{
-			if (view_person == FIRST_PERSON) 
-			{
-				UnProject(x, y, GLUT_RIGHT_BUTTON);
-			}
-			cameraAt.x *= VIEW_SCALE;
-			cameraAt.y *= VIEW_SCALE;
-			cameraAt.z *= VIEW_SCALE;
-		}
-	}
+	camera.mouse_Button(button, state, x, y, scr_h);
 	TexCube *newCube = new TexCube(man.x + 1, man.y, man.z + 1, 1.0f, Stone);
 	newCube->createCube();
 }
@@ -570,27 +245,24 @@ void mouseButton(int button, int state, int x, int y)
 // 鼠标移动回调函数
 void mouseMotion(int x, int y) 
 {
-
 	trackball_ptov(x, y, scr_w, scr_h, curPos);
 	trackMouse();
 	glutPostRedisplay();
 }
 
 // 空闲回调函数
+/*
 void idle() 
 {
 	// 如果鼠标发生移动，则后面自动转动
 	if (redrawContinue) glutPostRedisplay();
-}
+}*/
 
 // 键盘输入
 void control(unsigned char key, int x, int y) 
 {
 	Collision check;
-	cout << "X:" << man.x << "  z:" << man.z << endl;
-	float x_temp;
-	float z_temp;
-	float y_temp;
+	cout << "X:" << man.x << "  Z:" << man.z << endl;
 	switch (key) 
 	{
 	case 'p':
@@ -612,38 +284,7 @@ void control(unsigned char key, int x, int y)
 		man.back(chunk_test);
 		break;
 	case 'h':
-		reset_god = false;
-		if (view_person >= 3) 
-		{
-			view_person = 0;
-		}
-		else 
-		{
-			view_person++;
-		}
-		break;
-	case 'r':
-		if (view_person != 3) 
-		{
-			last_view = view_person;
-			view_person = 3;
-		}
-		else 
-		{
-			view_person = last_view;
-		}
-		break;
-	case 'z':
-		x_air = 8.0;
-		y_air = 8.0;
-		z_air = -10.0;
-		zRot = 0;
-		flying = false;
-		spining = false;
-		break;
-	case 'f':
-		flying = true;
-		spining = true;
+		camera.change_view();
 		break;
 	case 27:
 		exit(0);
@@ -746,23 +387,6 @@ void initOther()
 }
 
 /**
-* @brief 设定人物的初始位置（出生点^_^）
-* @return hhhhhhhhhh
-*/
-void setPosition()
-{
-
-	man.x = 6;	
-	man.y = 1;
-	man.z = 6;
-
-	x_air = 8.0f;
-	y_air = 8.0f;
-	z_air = -10.0f;
-}
-
-
-/**
 * @brief main函数
 * @param argc:参数数量  *argv[]参数数组
 * @return 呵呵呵呵呵呵
@@ -781,7 +405,7 @@ int main(int argc, char *argv[])
 
 	init();
 	//lastTime = clock();    //启动时首次设定当前时间
-	setPosition();
+	man.setLocation(6, 1, 6);
 	//ShowCursor(false);
 	initCube();
 	initOther();

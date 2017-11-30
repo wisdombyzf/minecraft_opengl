@@ -126,6 +126,7 @@
     <ClInclude Include="Word.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="coll_dete.cpp" />
     <ClCompile Include="Crawler.cpp" />

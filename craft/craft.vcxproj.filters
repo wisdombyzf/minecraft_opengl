@@ -116,6 +116,9 @@
     <ClCompile Include="Man.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

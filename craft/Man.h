@@ -80,7 +80,7 @@ public:
 	void set_move(bool move);
 
 	/**
-	* @brief 设置人物坐标
+	* @brief 设定人物坐标，也可以设定的初始位置（出生点^_^）
 	*/
 	void setLocation(float x, float y, float z) 
 	{
