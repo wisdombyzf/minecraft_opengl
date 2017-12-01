@@ -121,7 +121,9 @@
     <ClInclude Include="LightMaterial.h" />
     <ClInclude Include="Man.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="TexCube.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="visualBall.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>
@@ -135,7 +137,9 @@
     <ClCompile Include="LightMaterial.cpp" />
     <ClCompile Include="Man.cpp" />
     <ClCompile Include="mian.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="TexCube.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="visualBall.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>

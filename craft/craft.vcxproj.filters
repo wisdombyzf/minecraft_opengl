@@ -40,15 +40,18 @@
     <Filter Include="头文件\map">
       <UniqueIdentifier>{8aba5b2f-eecb-492f-b33f-f2e1ff061344}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\map">
+      <UniqueIdentifier>{7254bb3b-5b5c-4413-92e9-f6b3eb4b049d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\camera">
+      <UniqueIdentifier>{e8242a51-97e2-4893-87b7-b6065503c499}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Point.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="visualBall.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="LightMaterial.h">
@@ -79,7 +82,16 @@
       <Filter>头文件\map</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>头文件\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="visualBall.h">
+      <Filter>头文件\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>头文件\cube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -87,9 +99,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="visualBall.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Chunk.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Crawler.cpp">
@@ -110,13 +119,22 @@
     <ClCompile Include="coll_dete.cpp">
       <Filter>源文件\physics</Filter>
     </ClCompile>
-    <ClCompile Include="Word.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Man.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Chunk.cpp">
+      <Filter>源文件\map</Filter>
+    </ClCompile>
+    <ClCompile Include="Word.cpp">
+      <Filter>源文件\map</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

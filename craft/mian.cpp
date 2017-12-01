@@ -17,6 +17,7 @@
 #include"Chunk.h"
 #include"coll_dete.h"
 #include"Camera.h"
+#include"Skybox.h"
 
 using namespace std;
 ////参数
@@ -29,6 +30,7 @@ using namespace std;
 
 Chunk chunk_test;
 Camera camera;
+CSkyBox skybox;
 ///
 float near_sight = 0.1f;
 float far_sight = 100;
@@ -115,14 +117,17 @@ void floor()
 */
 void display() 
 {
+
 	lightMaterial.setBackGround();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glEnable(GL_BLEND);
 	lightMaterial.setLight();
+	//TODO  可能纹理贴反了
+	skybox.CreateSkyBox(man.x, man.y, man.z, 1.0, 0.5, 1.0);
 
 	glDisable(GL_BLEND);
 	lightMaterial.setMaterial(2);
+	
 	floor();
 	lightMaterial.setMaterial(0);
 	man.refresh();
@@ -402,7 +407,7 @@ int main(int argc, char *argv[])
 	glutInitWindowPosition((screenWidth - WindowWidth) / 2, (screenHeight - WindowHeight) / 2);
 	glutCreateWindow("我的世界");
 	//end	
-
+	cout << "话说如果没发生改变的。。。" << endl;
 	init();
 	//lastTime = clock();    //启动时首次设定当前时间
 	man.setLocation(6, 1, 6);
@@ -410,17 +415,17 @@ int main(int argc, char *argv[])
 	initCube();
 	initOther();
 	glutDisplayFunc(display);
-	///窗口大小改变时不改变游戏物体比例
+	//窗口大小改变时不改变游戏物体比例
 	glutReshapeFunc(reshape);
-	///当鼠标移动时，并有没鼠标键按下时的回调函数
+	//当鼠标移动时，并有没鼠标键按下时的回调函数
 	glutPassiveMotionFunc(passiveMotion);
-	///鼠标点击的回调函数
+	//鼠标点击的回调函数
 	glutMouseFunc(mouseButton);
-	///当鼠标移动时，鼠标键按下时的回调函数
+	//当鼠标移动时，鼠标键按下时的回调函数
 	glutMotionFunc(mouseMotion);
-	///键盘按键弹起时的回调函数
+	//键盘按键弹起时的回调函数
 	glutKeyboardUpFunc(controlup);
-	///键盘回调函数
+	//键盘回调函数
 	glutKeyboardFunc(control);
 
 	glutMainLoop();

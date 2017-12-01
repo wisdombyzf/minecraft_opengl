@@ -3,22 +3,23 @@
 #include <cmath>
 #include<gl\glut.h>
 #include "Point.h"
+#include"Texture.h"
 
 #define BMP_Header_Length 54
 
 class Cube 
 {
 public:
+	Cube();
+
 	Cube(float, float, float, float, GLuint, GLuint, GLuint);
 
+
 	void createCube();
-
-	static int power_of_two(int n);
-
-	static GLuint load_texture(const char *file_name);
-
+	/**
+	* @brief 加载所有方块纹理
+	*/
 	static void initCubeTexture();
-
 	~Cube();
 
 public:
@@ -43,8 +44,16 @@ public:
 	static GLuint texBookshelf;
 	static GLuint texRedSand;
 	static GLuint texSand;
+
+	//天空盒
+	static GLuint texSkybox_back;
+	static GLuint texSkybox_front;
+	static GLuint texSkybox_down;
+	static GLuint texSkybox_up;
+	static GLuint texSkybox_right;
+	static GLuint texSkybox_left;
+
 protected:
-	Cube() {};
 	GLuint _top, _bot, _side;
 };
 

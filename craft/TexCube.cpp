@@ -96,9 +96,9 @@ void TexCube::createCube()
 	float y = _y;
 	float z = _z;
 	float size = _size;
-	glBindTexture(GL_TEXTURE_2D, _bot);
-	glBegin(GL_QUADS);
+
 	//µ×Ãæ
+	glBindTexture(GL_TEXTURE_2D, _bot);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(x + size, y, z);
